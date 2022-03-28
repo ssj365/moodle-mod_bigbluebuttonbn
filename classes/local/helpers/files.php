@@ -148,7 +148,7 @@ class files {
                     'mod_bigbluebuttonbn',
                     'presentationdefault',
                     0,
-                    "filename",
+                    "itemid,filepath,filename",
                     false
                 );
                 $id = null; // This is the general presentation/default so we will generate
