@@ -188,7 +188,7 @@ class files {
             $file = reset($files);
         }
         if (empty($file)) {
-            return array('url' => null, 'name' => null, 'icon' => null, 'mimetype_description' => null); // File was not found.
+            return null; // File was not found.
         }
 
         // Note: $pnoncevalue is an int.
