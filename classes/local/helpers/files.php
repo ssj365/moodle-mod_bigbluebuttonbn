@@ -140,7 +140,7 @@ class files {
         global $CFG;
         $fs = get_file_storage();
         $files = [];
-        if (empty($presentation) || !(boolean) \mod_bigbluebuttonbn\local\config::get('preuploadpresentation_editable')) {
+        if (empty($presentation) || !\mod_bigbluebuttonbn\local\config::get('preuploadpresentation_editable')) {
             // Item has no presentation but the default is there.
             // Check if exist some file by default in general mod setting ("presentationdefault").
                 $files = $fs->get_area_files(
@@ -165,7 +165,7 @@ class files {
         }
 
         if (count($files) == 0) {
-            return null; // No presentation.
+            return array('url' => null, 'name' => null, 'icon' => null, 'mimetype_description' => null); // No presentation.
         }
 
         $pnoncevalue = 0;
@@ -188,7 +188,7 @@ class files {
             $file = reset($files);
         }
         if (empty($file)) {
-            return null; // File was not found.
+            return array('url' => null, 'name' => null, 'icon' => null, 'mimetype_description' => null); // File was not found.
         }
 
         // Note: $pnoncevalue is an int.
