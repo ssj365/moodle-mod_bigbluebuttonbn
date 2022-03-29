@@ -153,6 +153,10 @@ class files {
                 );
                 $id = null; // This is the general presentation/default so we will generate
                 // an id as if the activity was null.
+
+                if (count($files) == 0) {
+                    return null; // No presentation.
+                }
         } else {
             $files = $fs->get_area_files(
                 $context->id,
@@ -164,9 +168,6 @@ class files {
             );
         }
 
-        //if (count($files) == 0) {
-          //  return null; // No presentation.
-        //}
 
         $pnoncevalue = 0;
         if ($withnonce) {
