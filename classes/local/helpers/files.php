@@ -164,9 +164,9 @@ class files {
             );
         }
 
-        if (count($files) == 0) {
-            return array('url' => null, 'name' => null, 'icon' => null, 'mimetype_description' => null); // No presentation.
-        }
+        //if (count($files) == 0) {
+          //  return null; // No presentation.
+        //}
 
         $pnoncevalue = 0;
         if ($withnonce) {
