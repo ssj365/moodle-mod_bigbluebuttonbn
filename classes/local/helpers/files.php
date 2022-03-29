@@ -140,7 +140,7 @@ class files {
         global $CFG;
         $fs = get_file_storage();
         $files = [];
-        if (empty($presentation)) {
+        if (empty($presentation) || !\mod_bigbluebuttonbn\local\config::get('preuploadpresentation_editable')) {
             // Item has no presentation but the default is there.
             // Check if exist some file by default in general mod setting ("presentationdefault").
                 $files = $fs->get_area_files(
@@ -154,29 +154,20 @@ class files {
                 $id = null; // This is the general presentation/default so we will generate
                 // an id as if the activity was null.
         } else {
-            if (\mod_bigbluebuttonbn\local\config::get('preuploadpresentation_editable')) {
-                // Item has presentation but check activity setting enabled ("preuploadpresentation_editable").
-                $files = $fs->get_area_files(
-                    $context->id,
-                    'mod_bigbluebuttonbn',
-                    'presentation',
-                    0,
-                    'itemid, filepath, filename',
-                    false
-                );
-            }
-            else {
-                $files = $fs->get_area_files(
-                    $context->id,
-                    'mod_bigbluebuttonbn',
-                    'presentation',
-                    0,
-                    'itemid, filepath, filename',
-                    false
-                );
-
-                }
+            $files = $fs->get_area_files(
+                $context->id,
+                'mod_bigbluebuttonbn',
+                'presentation',
+                false,
+                'itemid, filepath, filename',
+                false
+            );
         }
+
+        if (count($files) == 0) {
+            return null; // No presentation.
+        }
+
         $pnoncevalue = 0;
         if ($withnonce) {
             $nonceid = 0;

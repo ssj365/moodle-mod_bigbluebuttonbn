@@ -597,7 +597,7 @@ class settings {
                 'bigbluebuttonbn_preuploadpresentation_editable',
                 get_string('config_preuploadpresentation_editable', 'bigbluebuttonbn'),
                 get_string('config_preuploadpresentation_editable_description', 'bigbluebuttonbn'),
-                0
+                1
             );
             $this->add_conditional_element(
                 'preuploadpresentation_editable',

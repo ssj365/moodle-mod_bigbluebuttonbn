@@ -64,7 +64,7 @@ class config {
             'waitformoderator_cache_ttl' => '60',
             'userlimit_default' => '0',
             'userlimit_editable' => false,
-            'preuploadpresentation_editable' => false,
+            'preuploadpresentation_editable' => true,
             'sendnotifications_enabled' => false,
             'recordingready_enabled' => false,
             'recordingstatus_enabled' => false,
