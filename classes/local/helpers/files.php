@@ -166,12 +166,15 @@ class files {
                 );
             }
             else {
-                $context->id,
-                'mod_bigbluebuttonbn',
-                'presentation',
-                0,
-                'itemid, filepath, filename',
-                false
+                $files = $fs->get_area_files(
+                    $context->id,
+                    'mod_bigbluebuttonbn',
+                    'presentation',
+                    0,
+                    'itemid, filepath, filename',
+                    false
+                );
+
                 }
         }
         $pnoncevalue = 0;
