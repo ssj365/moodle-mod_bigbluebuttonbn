@@ -166,18 +166,12 @@ class files {
                 );
             }
             else {
-                // Item has no presentation but the default is there.
-                // Check if exist some file by default in general mod setting ("presentationdefault").
-                $files = $fs->get_area_files(
-                    context_system::instance()->id,
-                    'mod_bigbluebuttonbn',
-                    'presentationdefault',
-                    0,
-                    "filename",
-                    false
-                );
-                $id = null; // This is the general presentation/default so we will generate
-                // an id as if the activity was null.
+                $context->id,
+                'mod_bigbluebuttonbn',
+                'presentation',
+                0,
+                'itemid, filepath, filename',
+                false
                 }
         }
         $pnoncevalue = 0;
