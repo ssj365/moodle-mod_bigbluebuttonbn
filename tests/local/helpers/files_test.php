@@ -155,6 +155,7 @@ class files_test extends \advanced_testcase {
      * Get filename test
      */
     public function test_pluginfile_filename() {
+        global $CFG;
         $this->resetAfterTest();
 
         list($user, $bbactivity, $bbactivitycm, $bbactivitycontext) = $this->create_user_and_activity();
