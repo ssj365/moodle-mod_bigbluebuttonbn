@@ -368,8 +368,9 @@ $string['mod_form_field_disablenote'] = 'Disable shared notes';
 $string['mod_form_field_hideuserlist'] = 'Hide user list';
 $string['mod_form_field_lockonjoin'] = 'Lock settings on join';
 $string['mod_form_locksettings'] = 'Lock settings';
-
-
+$string['report_join_info']  = 'Has joined the room {$a} time(s)';
+$string['report_play_recording_info']  = 'Has played a recording {$a} time(s)';
+$string['report_room_view']  = 'Has viewed the room';
 $string['starts_at'] = 'Starts';
 $string['started_at'] = 'Started';
 $string['ends_at'] = 'Ends';
