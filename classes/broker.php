@@ -148,9 +148,11 @@ class broker {
             $authorization = explode(" ", $headers['Authorization']);
 
             // Verify the authenticity of the request.
-            $token = \Firebase\JWT\JWT::decode(
+            // Encoding is different than the one used in broker.php for process_recording_ready_notifications.
+            $token = JWT::decode(
                 $authorization[1],
-                new Key(config::get('shared_secret'), 'HS512')
+                config::get('shared_secret'),
+                array('HS512')
             );
 
             // Get JSON string from the body.
