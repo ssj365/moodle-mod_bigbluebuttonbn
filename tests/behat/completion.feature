@@ -25,6 +25,7 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
     And I press "Save and display"
     And I log out
     Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page logged in as traverst
+    And I am on the "Test course" course page
     Then I should see "Done: View"
 
   @javascript
