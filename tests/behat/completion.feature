@@ -39,8 +39,9 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
       | Chats               | 1                                                 |
     And I press "Save and display"
     And I log out
-    Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page logged in as traverst
+    Given I am on the "Test course" course page logged in as traverst
     Then I should not see "Done: View"
+    And I am on the "RoomRecordings" "bigbluebuttonbn activity" page
     When I click on "Join session" "link"
     And the BigBlueButtonBN server has received the following events from user "traverst":
       | instancename   | eventtype |
@@ -53,4 +54,5 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
     And I close all opened windows
     And I switch to the main window
     Then I reload the page
+    And I am on the "Test course" course page
     Then I should see "Done: View"
