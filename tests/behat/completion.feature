@@ -17,8 +17,7 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
       | traverst | C1     | student |
 
   Scenario: I set the completion to standard type of completion.
-    Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page logged in as admin
-    And I click on "Settings" "link"
+    Given I am on the "RoomRecordings" "bigbluebuttonbn activity editing" page logged in as admin
     And I expand all fieldsets
     And I set the following fields to these values:
       | Completion tracking | Show activity as complete when conditions are met |
@@ -32,8 +31,7 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
   Scenario: I set the completion type to custom completion
     Given the following config values are set as admin:
       | bigbluebuttonbn_meetingevents_enabled | 1 |
-    And I am on the "RoomRecordings" "bigbluebuttonbn activity" page logged in as admin
-    And I click on "Settings" "link"
+    And I am on the "RoomRecordings" "bigbluebuttonbn activity editing" page logged in as admin
     And I expand all fieldsets
     And I set the following fields to these values:
       | Completion tracking | Show activity as complete when conditions are met |
