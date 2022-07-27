@@ -333,7 +333,7 @@ function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $DB;
 
     $dbparams = ['id' => $coursemodule->instance];
-    $fields = 'id, name, intro, introformat, completionattendance';
+    $fields = 'id, name, intro, introformat, completionattendance, completionengagementchats, completionengagementtalks, completionengagementraisehand, completionengagementpollvotes, completionengagementemojis';
     $bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', $dbparams, $fields);
     if (!$bigbluebuttonbn) {
         return null;
@@ -347,6 +347,11 @@ function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
     if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
         $info->customdata['customcompletionrules']['completionattendance'] = $bigbluebuttonbn->completionattendance;
+        $info->customdata['customcompletionrules']['completionengagementchats'] = $bigbluebuttonbn->completionengagementchats;
+        $info->customdata['customcompletionrules']['completionengagementtalks'] = $bigbluebuttonbn->completionengagementtalks;
+        $info->customdata['customcompletionrules']['completionengagementraisehand'] = $bigbluebuttonbn->completionengagementraisehand;
+        $info->customdata['customcompletionrules']['completionengagementpollvotes'] = $bigbluebuttonbn->completionengagementpollvotes;
+        $info->customdata['customcompletionrules']['completionengagementemojis'] = $bigbluebuttonbn->completionengagementemojis;
     }
 
     return $info;
