@@ -151,39 +151,40 @@ class completion_test extends \advanced_testcase {
         $moddefaults = (object) [
             'customdata' => [
                 'customcompletionrules' => [
-                    'completionengagementchats' => 1,
-                    'completionengagementtalks' => 1,
-                    'completionattendance' => 1,
-                    'completionengagementraisehand' => 1,
-                    'completionengagementpollvotes' => 1,
-                    'completionengagementemojis' => 1,
+                    'completionengagementchats' => 0,
+                    'completionengagementtalks' => 0,
+                    'completionattendance' => 0,
+                    'completionengagementraisehand' => 0,
+                    'completionengagementpollvotes' => 0,
+                    'completionengagementemojis' => 0,
                 ],
             ],
-            'completion' => 2,
+            'completion' => 2
         ];
 
         $completioncm1 = new custom_completion($cm1, $user->id);
         // TODO: check the return value here as there might be an issue with the function compared to the forum for example.
         $this->assertEquals(
             [
-                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 1),
+                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 0),
                 'completionattendance' => get_string('completionattendance_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 1)
+                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 0)
             ],
             $completioncm1->get_custom_rule_descriptions());
         $completioncm2 = new custom_completion($cm2, $user->id);
         $this->assertEquals(
             [
-                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 1),
+                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 0),
                 'completionattendance' => get_string('completionattendance_desc', 'mod_bigbluebuttonbn', 0),
-                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 1)
+                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 0)
             ], $completioncm2->get_custom_rule_descriptions());
+        $this->assertEquals($moddefaults, $completioncm2->get_custom_rule_descriptions());
     }
 
     /**
