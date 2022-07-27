@@ -54,6 +54,5 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
     And I close all opened windows
     And I switch to the main window
     Then I reload the page
-    And I trigger cron
     Given I am on the "Test course" course page
-    Then I should see "Done: Participate in 1 chat(s)"
+    Then I should not see "Done: View"

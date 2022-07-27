@@ -184,7 +184,6 @@ class completion_test extends \advanced_testcase {
                 'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 0),
                 'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 0)
             ], $completioncm2->get_custom_rule_descriptions());
-        $this->assertEquals($moddefaults, $completioncm2->get_custom_rule_descriptions());
     }
 
     /**
