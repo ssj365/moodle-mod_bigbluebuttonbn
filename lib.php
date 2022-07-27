@@ -333,7 +333,9 @@ function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $DB;
 
     $dbparams = ['id' => $coursemodule->instance];
-    $fields = 'id, name, intro, introformat, completionattendance, completionengagementchats, completionengagementtalks, completionengagementraisehand, completionengagementpollvotes, completionengagementemojis';
+    $fields = 'id, name, intro, introformat, completionattendance,
+        completionengagementchats, completionengagementtalks, completionengagementraisehand,
+        completionengagementpollvotes, completionengagementemojis';
     $bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', $dbparams, $fields);
     if (!$bigbluebuttonbn) {
         return null;

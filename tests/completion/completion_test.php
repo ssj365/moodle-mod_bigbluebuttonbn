@@ -138,7 +138,7 @@ class completion_test extends \advanced_testcase {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
-        // Two activities, both with automatic completion. One has the 'completionsubmit' rule, one doesn't.
+        // Two activities, both with automatic completion. One has the 'completionattendance' rule, one doesn't.
         // Inspired from the same test in forum.
         list($bbactivitycontext, $cm1, $bbactivity) = $this->create_instance($this->get_course(),
             ['completion' => '2', 'completionattendance' => '1']);
@@ -151,7 +151,12 @@ class completion_test extends \advanced_testcase {
         $moddefaults = (object) [
             'customdata' => [
                 'customcompletionrules' => [
-                    'completionsubmit' => '1',
+                    'completionengagementchats' => '1',
+                    'completionengagementtalks' => '1',
+                    'completionattendance' => '1',
+                    'completionengagementraisehand' => '1',
+                    'completionengagementpollvotes' => '1',
+                    'completionengagementemojis' => '1',
                 ],
             ],
             'completion' => 2,
