@@ -47,12 +47,17 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
       | instancename   | eventtype |
       | RoomRecordings | chats     |
     And I switch to "bigbluebutton_conference" window
-    And I click on "End Meeting" "link"
+    And I click on "Leave Meeting" "link"
     # Selenium driver does not like the click action to be done before we
     # automatically close the window so we need to make sure that the window
     # is closed before.
     And I close all opened windows
     And I switch to the main window
     Then I reload the page
-    Given I am on the "Test course" course page
-    Then I should not see "Done: View"
+    And I log out
+    Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page logged in as admin
+    And I click on "End session" "link"
+    Then I reload the page
+    And I log out
+    Given I am on the "Test course" course page logged in as traverst
+    Then I should see "Done: Participate in 1 chat(s)"

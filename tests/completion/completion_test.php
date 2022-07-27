@@ -145,23 +145,6 @@ class completion_test extends \advanced_testcase {
         list($bbactivitycontext, $cm2, $bbactivity) = $this->create_instance($this->get_course(),
             ['completion' => 2, 'completionattendance' => 0]);
 
-        // Data for the stdClass input type.
-        // This type of input would occur when checking the default completion rules for an activity type, where we don't have
-        // any access to cm_info, rather the input is a stdClass containing completion and customdata attributes, just like cm_info.
-        $moddefaults = (object) [
-            'customdata' => [
-                'customcompletionrules' => [
-                    'completionengagementchats' => 0,
-                    'completionengagementtalks' => 0,
-                    'completionattendance' => 0,
-                    'completionengagementraisehand' => 0,
-                    'completionengagementpollvotes' => 0,
-                    'completionengagementemojis' => 0,
-                ],
-            ],
-            'completion' => 2
-        ];
-
         $completioncm1 = new custom_completion($cm1, $user->id);
         // TODO: check the return value here as there might be an issue with the function compared to the forum for example.
         $this->assertEquals(
