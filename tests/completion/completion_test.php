@@ -141,9 +141,9 @@ class completion_test extends \advanced_testcase {
         // Two activities, both with automatic completion. One has the 'completionattendance' rule, one doesn't.
         // Inspired from the same test in forum.
         list($bbactivitycontext, $cm1, $bbactivity) = $this->create_instance($this->get_course(),
-            ['completion' => '2', 'completionattendance' => '1']);
+            ['completion' => 2, 'completionattendance' => 1]);
         list($bbactivitycontext, $cm2, $bbactivity) = $this->create_instance($this->get_course(),
-            ['completion' => '2', 'completionattendance' => '0']);
+            ['completion' => 2, 'completionattendance' => 0]);
 
         // Data for the stdClass input type.
         // This type of input would occur when checking the default completion rules for an activity type, where we don't have
@@ -151,12 +151,12 @@ class completion_test extends \advanced_testcase {
         $moddefaults = (object) [
             'customdata' => [
                 'customcompletionrules' => [
-                    'completionengagementchats' => '1',
-                    'completionengagementtalks' => '1',
-                    'completionattendance' => '1',
-                    'completionengagementraisehand' => '1',
-                    'completionengagementpollvotes' => '1',
-                    'completionengagementemojis' => '1',
+                    'completionengagementchats' => 1,
+                    'completionengagementtalks' => 1,
+                    'completionattendance' => 1,
+                    'completionengagementraisehand' => 1,
+                    'completionengagementpollvotes' => 1,
+                    'completionengagementemojis' => 1,
                 ],
             ],
             'completion' => 2,
