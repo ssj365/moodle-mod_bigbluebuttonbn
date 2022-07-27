@@ -55,4 +55,4 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
     And I switch to the main window
     Then I reload the page
     Given I am on the "Test course" course page
-    Then I should see "Done: Student must participate in 1 chat(s) to complete it."
+    Then I should see "Done: Participate in 1 chat(s)"
