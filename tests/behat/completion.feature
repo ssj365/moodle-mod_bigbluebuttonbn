@@ -54,9 +54,5 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
     And I close all opened windows
     And I switch to the main window
     Then I reload the page
-    And I log out
-    Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page logged in as admin
-    Then I reload the page
-    And I log out
-    Given I am on the "Test course" course page logged in as traverst
-    Then I should see "Done: Participate in 1 chat(s)"
+    Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page
+    Then I should see "Done: View"
