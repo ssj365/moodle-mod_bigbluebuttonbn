@@ -57,6 +57,7 @@ global $CFG;
  * @uses FEATURE_GRADE_HAS_GRADE
  * @uses FEATURE_GRADE_OUTCOMES
  * @uses FEATURE_SHOW_DESCRIPTION
+ * @uses FEATURE_MOD_PURPOSE
  */
 function bigbluebuttonbn_supports($feature) {
     if (!$feature) {
@@ -73,7 +74,7 @@ function bigbluebuttonbn_supports($feature) {
         FEATURE_GRADE_HAS_GRADE => false,
         FEATURE_GRADE_OUTCOMES => false,
         FEATURE_SHOW_DESCRIPTION => true,
-        //FEATURE_MOD_PURPOSE => MOD_PURPOSE_OTHER
+        FEATURE_MOD_PURPOSE => MOD_PURPOSE_OTHER
     ];
     if (isset($features[(string) $feature])) {
         return $features[$feature];
