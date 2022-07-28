@@ -73,6 +73,7 @@ function bigbluebuttonbn_supports($feature) {
         FEATURE_GRADE_HAS_GRADE => false,
         FEATURE_GRADE_OUTCOMES => false,
         FEATURE_SHOW_DESCRIPTION => true,
+        FEATURE_MOD_PURPOSE => MOD_PURPOSE_OTHER
     ];
     if (isset($features[(string) $feature])) {
         return $features[$feature];
@@ -485,6 +486,10 @@ function mod_bigbluebuttonbn_core_calendar_provide_event_action(
         }
         // Get if the user can join.
         $meetinginfo = meeting::get_meeting_info_for_instance($instance);
+    } catch (moodle_exception $e) {
+        debugging('Error - Cannot retrieve info from meeting ('.$instance->get_meeting_id().') ' . $e->getMessage());
+        return null;
+    }
     $usercanjoin = $meetinginfo->canjoin;
 
     // Check if the room is closed and the user has already joined this session or played the record.
