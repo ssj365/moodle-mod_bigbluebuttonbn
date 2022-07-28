@@ -269,7 +269,7 @@ class custom_completion extends activity_custom_completion {
      * @return int
      */
     protected static function get_completionengagementpollvotes_value(stdClass $log): int {
-        return self::get_completionengagement_value($log, 'pollvotes');
+        return self::get_completionengagement_value($log, 'poll_votes');
     }
 
     /**
@@ -291,6 +291,6 @@ class custom_completion extends activity_custom_completion {
      */
     protected static function get_completionengagement_value(stdClass $log, string $type): int {
         $summary = json_decode($log->meta);
-        return empty($summary->data->engagement->$type) ? 0 : 1;
+        return intval($summary->data->engagement->$type ?? 0);
     }
 }

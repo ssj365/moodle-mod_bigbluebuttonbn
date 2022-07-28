@@ -313,9 +313,7 @@ class mod_bigbluebuttonbn_generator extends \testing_module_generator {
         } else {
             $roomconfig['meetingID'] = $meetingid;
         }
-
         $this->send_mock_request('backoffice/createMeeting', [], $roomconfig);
-
         return (object) $roomconfig;
     }
 

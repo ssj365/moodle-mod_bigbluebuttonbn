@@ -33,9 +33,11 @@ use mod_bigbluebuttonbn\local\bigbluebutton;
 use mod_bigbluebuttonbn\local\helpers\files;
 use mod_bigbluebuttonbn\local\helpers\mod_helper;
 use mod_bigbluebuttonbn\local\helpers\reset;
+use mod_bigbluebuttonbn\local\proxy\bigbluebutton_proxy;
 use mod_bigbluebuttonbn\logger;
 use mod_bigbluebuttonbn\meeting;
 use mod_bigbluebuttonbn\recording;
+use mod_bigbluebuttonbn\local\config;
 
 global $CFG;
 
@@ -71,6 +73,7 @@ function bigbluebuttonbn_supports($feature) {
         FEATURE_GRADE_HAS_GRADE => false,
         FEATURE_GRADE_OUTCOMES => false,
         FEATURE_SHOW_DESCRIPTION => true,
+        FEATURE_MOD_PURPOSE => MOD_PURPOSE_OTHER
     ];
     if (isset($features[(string) $feature])) {
         return $features[$feature];
@@ -333,9 +336,14 @@ function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $DB;
 
     $dbparams = ['id' => $coursemodule->instance];
-    $fields = 'id, name, intro, introformat, completionattendance,
-        completionengagementchats, completionengagementtalks, completionengagementraisehand,
-        completionengagementpollvotes, completionengagementemojis';
+    $customcompletionfields = custom_completion::get_defined_custom_rules();
+    $fieldsarray = array_merge([
+        'id',
+        'name',
+        'intro',
+        'introformat',
+    ], $customcompletionfields);
+    $fields = join(',', $fieldsarray);
     $bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', $dbparams, $fields);
     if (!$bigbluebuttonbn) {
         return null;
@@ -348,12 +356,10 @@ function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     }
     // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
     if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
-        $info->customdata['customcompletionrules']['completionattendance'] = $bigbluebuttonbn->completionattendance;
-        $info->customdata['customcompletionrules']['completionengagementchats'] = $bigbluebuttonbn->completionengagementchats;
-        $info->customdata['customcompletionrules']['completionengagementtalks'] = $bigbluebuttonbn->completionengagementtalks;
-        $info->customdata['customcompletionrules']['completionengagementraisehand'] = $bigbluebuttonbn->completionengagementraisehand;
-        $info->customdata['customcompletionrules']['completionengagementpollvotes'] = $bigbluebuttonbn->completionengagementpollvotes;
-        $info->customdata['customcompletionrules']['completionengagementemojis'] = $bigbluebuttonbn->completionengagementemojis;
+        foreach ($customcompletionfields as $completiontype) {
+            $info->customdata['customcompletionrules'][$completiontype] =
+                $bigbluebuttonbn->$completiontype ?? 0;
+        }
     }
 
     return $info;
@@ -470,8 +476,20 @@ function mod_bigbluebuttonbn_core_calendar_provide_event_action(
     $instance = instance::get_from_instanceid($bigbluebuttonbn->id);
     // Get if the room is available.
     $roomavailable = $instance->is_currently_open();
-    // Get if the user can join.
-    $meetinginfo = meeting::get_meeting_info_for_instance($instance);
+
+    $meetinginfo = null;
+    // Check first if the server can be contacted.
+    try {
+        if (empty(bigbluebutton_proxy::get_server_version())) {
+            // In this case we should already have debugging message printed.
+            return null;
+        }
+        // Get if the user can join.
+        $meetinginfo = meeting::get_meeting_info_for_instance($instance);
+    } catch (moodle_exception $e) {
+        debugging('Error - Cannot retrieve info from meeting ('.$instance->get_meeting_id().') ' . $e->getMessage());
+        return null;
+    }
     $usercanjoin = $meetinginfo->canjoin;
 
     // Check if the room is closed and the user has already joined this session or played the record.
@@ -521,17 +539,17 @@ function mod_bigbluebuttonbn_core_calendar_is_event_visible(calendar_event $even
  * @param navigation_node $nodenav The node to add module settings to
  */
 function bigbluebuttonbn_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $nodenav) {
-    global $PAGE, $USER;
+    global $USER;
     // Don't add validate completion if the callback for meetingevents is NOT enabled.
     if (!(boolean) \mod_bigbluebuttonbn\local\config::get('meetingevents_enabled')) {
         return;
     }
     // Don't add validate completion if user is not allowed to edit the activity.
-    $context = context_module::instance($PAGE->cm->id);
+    $context = context_module::instance($settingsnav->get_page()->cm->id);
     if (!has_capability('moodle/course:manageactivities', $context, $USER->id)) {
         return;
     }
-    $completionvalidate = '#action=completion_validate&bigbluebuttonbn=' . $PAGE->cm->instance;
+    $completionvalidate = '#action=completion_validate&bigbluebuttonbn=' . $settingsnav->get_page()->cm->instance;
     $nodenav->add(get_string('completionvalidatestate', 'bigbluebuttonbn'),
         $completionvalidate, navigation_node::TYPE_CONTAINER);
 }
