@@ -55,4 +55,4 @@ Feature: As a user I can complete a BigblueButtonBN activity by usual or custom 
     And I switch to the main window
     Then I reload the page
     Given I am on the "RoomRecordings" "bigbluebuttonbn activity" page
-    Then I should see "Done: View"
+    Then I should see "To do: Participate in 1 chat(s)."
