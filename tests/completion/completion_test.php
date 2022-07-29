@@ -161,22 +161,12 @@ class completion_test extends \advanced_testcase {
         list($bbactivitycontext, $cm1, $bbactivity) = $this->create_instance($this->get_course(),
             ['completion' => '2']);
         $cm1->override_customdata('customcompletionrules', [
-            'completionengagementchats' => '0',
-            'completionengagementtalks' => '0',
-            'completionattendance' => '1',
-            'completionengagementraisehand' => '0',
-            'completionengagementpollvotes' => '0',
-            'completionengagementemojis' => '0'
+            'completionattendance' => '1'
         ]);
         list($bbactivitycontext, $cm2, $bbactivity) = $this->create_instance($this->get_course(),
             ['completion' => '2']);
         $cm2->override_customdata('customcompletionrules', [
-            'completionengagementchats' => '0',
-            'completionengagementtalks' => '0',
             'completionattendance' => '0',
-            'completionengagementraisehand' => '0',
-            'completionengagementpollvotes' => '0',
-            'completionengagementemojis' => '0'
         ]);
 
         $completioncm1 = new custom_completion($cm1, $user->id);
