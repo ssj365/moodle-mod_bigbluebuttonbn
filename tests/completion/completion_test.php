@@ -156,40 +156,50 @@ class completion_test extends \advanced_testcase {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
-        // Two activities, both with automatic completion. One has the 'completionsubmit' rule, one doesn't.
+        // Two activities, both with automatic completion. One has the 'completionattendance' rule, one doesn't.
         // Inspired from the same test in forum.
         list($bbactivitycontext, $cm1, $bbactivity) = $this->create_instance($this->get_course(),
             ['completion' => '2']);
         $cm1->override_customdata('customcompletionrules', [
-            'completionattendance' => '1'
+            'completionengagementchats' => '0',
+            'completionengagementtalks' => '0',
+            'completionattendance' => '1',
+            'completionengagementraisehand' => '0',
+            'completionengagementpollvotes' => '0',
+            'completionengagementemojis' => '0'
         ]);
         list($bbactivitycontext, $cm2, $bbactivity) = $this->create_instance($this->get_course(),
             ['completion' => '2']);
         $cm2->override_customdata('customcompletionrules', [
-            'completionattendance' => '0'
+            'completionengagementchats' => '0',
+            'completionengagementtalks' => '0',
+            'completionattendance' => '0',
+            'completionengagementraisehand' => '0',
+            'completionengagementpollvotes' => '0',
+            'completionengagementemojis' => '0'
         ]);
 
         $completioncm1 = new custom_completion($cm1, $user->id);
         // TODO: check the return value here as there might be an issue with the function compared to the forum for example.
         $this->assertEquals(
             [
-                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 1),
+                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 0),
                 'completionattendance' => get_string('completionattendance_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 1)
+                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 0)
             ],
             $completioncm1->get_custom_rule_descriptions());
         $completioncm2 = new custom_completion($cm2, $user->id);
         $this->assertEquals(
             [
-                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 1),
+                'completionengagementchats' => get_string('completionengagementchats_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementtalks' => get_string('completionengagementtalks_desc', 'mod_bigbluebuttonbn', 0),
                 'completionattendance' => get_string('completionattendance_desc', 'mod_bigbluebuttonbn', 0),
-                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 1),
-                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 1)
+                'completionengagementraisehand' => get_string('completionengagementraisehand_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementpollvotes' => get_string('completionengagementpollvotes_desc', 'mod_bigbluebuttonbn', 0),
+                'completionengagementemojis' => get_string('completionengagementemojis_desc', 'mod_bigbluebuttonbn', 0)
             ], $completioncm2->get_custom_rule_descriptions());
     }
 
