@@ -87,28 +87,28 @@ $string['privacy:metadata:bigbluebuttonbn_recordings'] = 'Stores metadata about 
 $string['privacy:metadata:bigbluebuttonbn_recordings:userid'] = 'The user ID of the user who last changed a recording.';
 
 $string['completionattendance'] = 'Student must attend the session for:';
-$string['completionattendance_desc'] = 'Student must enter the room and remain in the session for at least {$a} minute(s)';
+$string['completionattendance_desc'] = 'Enter and remain in the room for at least {$a} minute(s).';
 $string['completionattendance_event_desc'] = 'Student has entered the room and remained in the session for at least {$a} minute(s)';
 $string['completionattendancegroup'] = 'Require attendance';
 $string['completionattendancegroup_help'] = 'Attending the meeting for (n) minutes is required for completion.';
 
 $string['completionengagementchats'] = 'Chats';
-$string['completionengagementchats_desc'] = 'Student must participate in {$a} chat(s) to complete it.';
+$string['completionengagementchats_desc'] = 'Participate in {$a} chat(s).';
 $string['completionengagementchats_event_desc'] = 'Has raised {$a} chat(s)';
 $string['completionengagementtalks'] = 'Talk';
-$string['completionengagementtalks_desc'] = 'Student must talk {$a} time(s) to complete it';
+$string['completionengagementtalks_desc'] = 'Talk {$a} time(s)';
 $string['completionengagementtalks_event_desc'] = 'Has raised {$a} talk(s)';
 $string['completionengagementraisehand'] = 'Require raised hand';
-$string['completionengagementraisehand_desc'] = 'Student must raise hand {$a} time(s) to complete it.';
+$string['completionengagementraisehand_desc'] = 'Raise hand {$a} time(s).';
 $string['completionengagementraisehand_event_desc'] = 'Has raised hand {$a} times';
 $string['completionengagementpollvotes'] = 'Poll votes';
-$string['completionengagementpollvotes_desc'] = 'Student must vote in polls {$a} time(s) to complete it.';
-$string['completionengagementpollvotes_event_desc'] = 'Has raised {$a} poll vote(s)';
+$string['completionengagementpollvotes_desc'] = 'Vote in polls {$a} time(s).';
+$string['completionengagementpollvotes_event_desc'] = 'Has answered {$a} poll vote(s)';
 $string['completionengagementemojis'] = 'Emojis';
-$string['completionengagementemojis_desc'] = 'Student must send {$a} emoji(s) into polls to complete it.';
-$string['completionengagementemojis_event_desc'] = 'Has raised {$a} emoji(s)';
+$string['completionengagementemojis_desc'] = 'Change {$a} times his/her emoji(s).';
+$string['completionengagementemojis_event_desc'] = 'Changed {$a} time his/her emoji(s)';
 
-$string['completionengagement_desc'] = 'Student must engage in activities during the meeting';
+$string['completionengagement_desc'] = 'Engage in activities during the meeting.';
 $string['completionengagementgroup'] = 'Require participation';
 $string['completionengagementgroup_help'] = 'Active participation during the session is required for completion.';
 
@@ -117,8 +117,8 @@ $string['completionvalidatestate'] = 'Validate completion';
 $string['completionvalidatestatetriggered'] = 'Validate completion has been triggered.';
 
 $string['completionview'] = 'Require view';
-$string['completionview_desc'] = 'Student must join a room or play a recording to complete it.';
-$string['completionview_event_desc'] = 'Has joined the room or played a recording {$a} time(s)';
+$string['completionview_desc'] = 'Student must view the room to complete it.';
+$string['completionview_event_desc'] = 'Has viewed the room.';
 $string['sendnotification'] = 'Send notification';
 
 $string['minute'] = 'minute';
@@ -126,16 +126,10 @@ $string['minutes'] = 'minutes';
 
 $string['config_general'] = 'General settings';
 $string['config_general_description'] = 'These settings are always used.';
-$string['config_server_url'] = 'BigBlueButton server URL';
-$string['config_server_url_description'] = 'The default credentials are for a <a href="https://bigbluebutton.org/free-bigbluebutton-service-for-moodle/" target="_blank">free BigBlueButton service for Moodle (opens in new window)</a> provided by Blindside Networks with restrictions as follows:
-<ol>
-<li>The maximum length for each session is 60 minutes</li>
-<li>The maximum number of concurrent users per session is 25</li>
-<li>Recordings expire after seven (7) days and are not downloadable</li>
-<li>Student webcams are only visible to the moderator.</li>
-</ol>';
-$string['config_shared_secret'] = 'BigBlueButton shared secret';
-$string['config_shared_secret_description'] = 'The security secret of your BigBlueButton server. The default secret is for a free BigBlueButton server provided by Blindside Networks.';
+$string['config_server_url'] = 'BigBlueButton Server URL';
+$string['config_server_url_description'] = 'The URL of your BigBlueButton server must end with /bigbluebutton/. (This default URL is for a BigBlueButton server provided by Blindside Networks that you can use for testing.)';
+$string['config_shared_secret'] = 'BigBlueButton Shared Secret';
+$string['config_shared_secret_description'] = 'The security salt of your BigBlueButton server.  (This default salt is for a BigBlueButton server provided by Blindside Networks that you can use for testing.)';
 
 $string['config_recording'] = 'Recording';
 $string['config_recording_description'] = 'These settings are feature specific';
@@ -159,10 +153,6 @@ $string['config_recordings'] = 'Show recordings';
 $string['config_recordings_description'] = 'These settings are feature specific';
 $string['config_recordings_general'] = 'Show recording settings';
 $string['config_recordings_general_description'] = 'These settings are used only when showing recordings';
-$string['config_recordings_deleted_default'] = 'Include recordings from deleted activities enabled by default';
-$string['config_recordings_deleted_default_description'] = 'If enabled, the recording table will include recordings of any activities which have since been deleted.';
-$string['config_recordings_deleted_editable'] = 'Include recordings from deleted activities feature can be edited';
-$string['config_recordings_deleted_editable_description'] = 'Include recordings from deleted activities by default can be edited when the instance is added or updated.';
 $string['config_recordings_imported_default'] = 'Show only imported links enabled by default';
 $string['config_recordings_imported_default_description'] = 'If enabled the recording table will include only the imported links to recordings.';
 $string['config_recordings_imported_editable'] = 'Show only imported links feature can be edited';
@@ -199,8 +189,8 @@ $string['config_voicebridge_editable_description'] = 'A conference voice bridge 
 
 $string['config_preuploadpresentation'] = 'Pre-upload presentation';
 $string['config_preuploadpresentation_description'] = 'These settings enable or disable options in the UI and also define default values for these options. The feature works only if the Moodle server is accessible to BigBlueButton.';
-$string['config_preuploadpresentation_enabled'] = 'Pre-upload presentation';
-$string['config_preuploadpresentation_enabled_description'] = 'If enabled, an option is provided in the BigBlueButton activity settings to upload presentation files ready for use in the room.';
+$string['config_preuploadpresentation_editable'] = 'Pre-uploading presentation editable';
+$string['config_preuploadpresentation_editable_description'] = 'Preupload presentation feature is editable in the UI when the room or conference is added or updated.';
 
 $string['config_presentation_default'] = 'Default presentation file';
 $string['config_presentation_default_description'] = 'A file may be provided for use in all rooms.';
@@ -365,7 +355,6 @@ $string['mod_form_field_notification_created_help'] = 'Send a notification to al
 $string['mod_form_field_notification_modified_help'] = 'Send a notification to all users enrolled to let them know that this activity has been updated';
 $string['mod_form_field_notification_msg_at'] = 'at';
 $string['mod_form_field_recordings_html'] = 'Show the table in plain HTML';
-$string['mod_form_field_recordings_deleted'] = 'Include recordings from deleted activities';
 $string['mod_form_field_recordings_imported'] = 'Show only imported links';
 $string['mod_form_field_recordings_preview'] = 'Show recording preview';
 $string['mod_form_field_recordallfromstart'] = 'Record all from start';
@@ -379,8 +368,9 @@ $string['mod_form_field_disablenote'] = 'Disable shared notes';
 $string['mod_form_field_hideuserlist'] = 'Hide user list';
 $string['mod_form_field_lockonjoin'] = 'Lock settings on join';
 $string['mod_form_locksettings'] = 'Lock settings';
-
-
+$string['report_join_info']  = 'Has joined the room {$a} time(s)';
+$string['report_play_recording_info']  = 'Has played a recording {$a} time(s)';
+$string['report_room_view']  = 'Has viewed the room';
 $string['starts_at'] = 'Starts';
 $string['started_at'] = 'Started';
 $string['ends_at'] = 'Ends';
@@ -610,3 +600,18 @@ $string['userlimitreached'] = 'The number of users allowed in a session has been
 $string['waitformoderator'] = 'Waiting for a moderator to join.';
 
 $string['recordingurlnotfound'] = 'The recording URL is invalid.';
+
+// Deprecated strings still needed for older BBB versions using 3.11 language packs.
+$string['mod_form_field_notification_msg_created'] = 'added';
+$string['mod_form_field_notification_msg_modified'] = 'updated';
+$string['email_body_notification_meeting_has_been'] = 'has been';
+$string['email_body_notification_meeting_details'] = 'Details';
+$string['email_body_notification_meeting_title'] = 'Title';
+$string['email_body_notification_meeting_description'] = 'Description';
+$string['email_body_notification_meeting_start_date'] = 'Start date';
+$string['email_body_notification_meeting_end_date'] = 'End date';
+$string['email_body_notification_meeting_by'] = 'by';
+$string['email_body_recording_ready_for'] = 'There is a recording ready for';
+$string['email_body_recording_ready_in_course'] = 'in the course';
+$string['email_footer_sent_by'] = 'This automatic notification message was sent by';
+$string['email_footer_sent_from'] = 'from the course';

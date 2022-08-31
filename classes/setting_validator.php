@@ -41,6 +41,17 @@ class setting_validator {
     }
 
     /**
+     * Validate if default messages section will be shown.
+     *
+     * @return bool
+     */
+    public static function section_default_messages_shown() {
+        global $CFG;
+        return (!isset($CFG->bigbluebuttonbn['welcome_default']) ||
+                !isset($CFG->bigbluebuttonbn['welcome_editable']));
+    }
+
+    /**
      * Validate if record meeting section  will be shown.
      *
      * @return bool
@@ -74,9 +85,7 @@ class setting_validator {
      */
     public static function section_show_recordings_shown() {
         global $CFG;
-        return (!isset($CFG->bigbluebuttonbn['recordings_deleted_default']) ||
-                !isset($CFG->bigbluebuttonbn['recordings_deleted_editable']) ||
-                !isset($CFG->bigbluebuttonbn['recordings_imported_default']) ||
+        return (!isset($CFG->bigbluebuttonbn['recordings_imported_default']) ||
                 !isset($CFG->bigbluebuttonbn['recordings_imported_editable']) ||
                 !isset($CFG->bigbluebuttonbn['recordings_preview_default']) ||
                 !isset($CFG->bigbluebuttonbn['recordings_preview_editable']) ||
@@ -114,7 +123,7 @@ class setting_validator {
      */
     public static function section_preupload_presentation_shown() {
         global $CFG;
-        return (!isset($CFG->bigbluebuttonbn['preuploadpresentation_enabled']));
+        return (!isset($CFG->bigbluebuttonbn['preuploadpresentation_editable']));
     }
 
     /**

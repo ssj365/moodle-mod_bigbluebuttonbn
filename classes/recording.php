@@ -17,7 +17,6 @@
 namespace mod_bigbluebuttonbn;
 
 use cache;
-use context;
 use context_course;
 use context_module;
 use core\persistent;
@@ -117,8 +116,6 @@ class recording extends persistent {
         bool $includeimported = false,
         bool $onlyimported = false
     ): array {
-        global $DB;
-
         [$selects, $params] = self::get_basic_select_from_parameters(false, $includeimported, $onlyimported);
         $selects[] = "bigbluebuttonbnid = :bbbid";
         $params['bbbid'] = $instance->get_instance_id();
@@ -154,7 +151,6 @@ class recording extends persistent {
      * @param bool $includeimported
      * @param bool $onlyimported
      * @param bool $includedeleted
-     * @param bool $onlydeleted
      *
      * @return recording[] containing the recordings indexed by recordID, each recording is also a
      * non sequential associative array itself that corresponds to the actual recording in BBB
@@ -164,13 +160,14 @@ class recording extends persistent {
         array $excludedinstanceid = [],
         bool $includeimported = false,
         bool $onlyimported = false,
-        bool $includedeleted = false,
-        bool $onlydeleted = false
+        bool $includedeleted = false
     ): array {
         global $DB;
 
         [$selects, $params] = self::get_basic_select_from_parameters(
-            $includedeleted, $includeimported, $onlyimported, $onlydeleted
+            $includedeleted,
+            $includeimported,
+            $onlyimported
         );
         if ($courseid) {
             $selects[] = "courseid = :courseid";
@@ -230,7 +227,7 @@ class recording extends persistent {
                     $allowedgroups = groups_get_all_groups($courseid, $USER->id);
                 }
             }
-            $allowedgroupsid = array_map(function($g) {
+            $allowedgroupsid = array_map(function ($g) {
                 return $g->id;
             }, $allowedgroups);
             if ($groupid || empty($allowedgroups)) {
@@ -258,24 +255,18 @@ class recording extends persistent {
      * @param bool $includedeleted
      * @param bool $includeimported
      * @param bool $onlyimported
-     * @param bool $onlydeleted
      * @return array
      */
     protected static function get_basic_select_from_parameters(
         bool $includedeleted = false,
         bool $includeimported = false,
-        bool $onlyimported = false,
-        bool $onlydeleted = false
+        bool $onlyimported = false
     ): array {
         $selects = [];
         $params = [];
 
         // Start with the filters.
-        if ($onlydeleted) {
-            // Only headless recordings when only deleted is set.
-            $selects[] = "headless = :headless";
-            $params['headless'] = self::RECORDING_HEADLESS;
-        } else if (!$includedeleted) {
+        if (!$includedeleted) {
             // Exclude headless recordings unless includedeleted.
             $selects[] = "headless != :headless";
             $params['headless'] = self::RECORDING_HEADLESS;
@@ -553,7 +544,6 @@ class recording extends persistent {
      */
     protected function get_description() {
         return trim($this->metadata_get('description'));
-
     }
 
     /**
@@ -570,7 +560,7 @@ class recording extends persistent {
      */
     protected function get_playbacks() {
         if ($playbacks = $this->metadata_get('playbacks')) {
-            return array_map(function(array $playback): array {
+            return array_map(function (array $playback): array {
                 $clone = array_merge([], $playback);
                 $clone['url'] = new moodle_url('/mod/bigbluebuttonbn/bbb_view.php', [
                     'action' => 'play',
@@ -678,11 +668,6 @@ class recording extends persistent {
     }
 
     /**
-     * @var string Default sort for recordings when fetching from the database.
-     */
-    const DEFAULT_RECORDING_SORT = 'timecreated ASC';
-
-    /**
      * Fetch all records which match the specified parameters, including all metadata that relates to them.
      *
      * @param array $selects
@@ -690,16 +675,22 @@ class recording extends persistent {
      * @return recording[]
      */
     protected static function fetch_records(array $selects, array $params): array {
-        global $DB;
+        global $DB, $CFG;
 
         $withindays = time() - (self::RECORDING_TIME_LIMIT_DAYS * DAYSECS);
+        // Sort for recordings when fetching from the database.
+        $recordingsort = $CFG->bigbluebuttonbn_recordings_sortorder ? 'timecreated ASC' : 'timecreated DESC';
 
         // Fetch the local data. Arbitrary sort by id, so we get the same result on different db engines.
-        $recordings = $DB->get_records_select(static::TABLE, implode(" AND ", $selects), $params,
-            self::DEFAULT_RECORDING_SORT);
+        $recordings = $DB->get_records_select(
+            static::TABLE,
+            implode(" AND ", $selects),
+            $params,
+            $recordingsort
+        );
 
         // Grab the recording IDs.
-        $recordingids = array_values(array_map(function($recording) {
+        $recordingids = array_values(array_map(function ($recording) {
             return $recording->recordingid;
         }, $recordings));
 
@@ -707,7 +698,7 @@ class recording extends persistent {
         $metadatas = recording_proxy::fetch_recordings($recordingids);
 
         // Return the instances.
-        return array_filter(array_map(function($recording) use ($metadatas, $withindays) {
+        return array_filter(array_map(function ($recording) use ($metadatas, $withindays) {
             // Filter out if no metadata was fetched.
             if (!array_key_exists($recording->recordingid, $metadatas)) {
                 // Mark it as dismissed if it is older than 30 days.
@@ -769,8 +760,10 @@ class recording extends persistent {
      * This function should be called by the check_pending_recordings scheduled task.
      */
     public static function sync_pending_recordings_from_server(): void {
-        global $DB;
+        global $DB, $CFG;
 
+        // Sort by bigbluebuttonbn_recordings_sortorder we get the same result on different db engines.
+        $recordingsort = $CFG->bigbluebuttonbn_recordings_sortorder ? 'timecreated ASC' : 'timecreated DESC';
         // Fetch the local data.
         mtrace("=> Looking for any recording awaiting processing from the past " . self::RECORDING_TIME_LIMIT_DAYS . " days.");
         $select = 'status = :status_awaiting AND timecreated > :withindays OR status = :status_reset';
@@ -778,14 +771,13 @@ class recording extends persistent {
                 'status_awaiting' => self::RECORDING_STATUS_AWAITING,
                 'withindays' => time() - (self::RECORDING_TIME_LIMIT_DAYS * DAYSECS),
                 'status_reset' => self::RECORDING_STATUS_RESET,
-            ], self::DEFAULT_RECORDING_SORT);
-        // Sort by DEFAULT_RECORDING_SORT we get the same result on different db engines.
+            ], $recordingsort);
 
         $recordingcount = count($recordings);
         mtrace("=> Found {$recordingcount} recordings to query");
 
         // Grab the recording IDs.
-        $recordingids = array_map(function($recording) {
+        $recordingids = array_map(function ($recording) {
             return $recording->recordingid;
         }, $recordings);
 
@@ -795,12 +787,36 @@ class recording extends persistent {
 
         $foundcount = 0;
         foreach ($metadatas as $recordingid => $metadata) {
-            mtrace("==> Found updated metadata for {$recordingid}. Updating local cache.");
+            mtrace("==> Found metadata for {$recordingid}.");
             $id = array_search($recordingid, $recordingids);
-
+            if (!$id) {
+                // Recording was not found, skip.
+                mtrace("===> Skip as fetched recording was not found.");
+                continue;
+            }
+            // Recording was found, update status.
+            mtrace("===> Update local cache as fetched recording was found.");
             $recording = new self(0, $recordings[$id], $metadata);
             $recording->set_status(self::RECORDING_STATUS_PROCESSED);
             $foundcount++;
+
+            if (array_key_exists('breakouts', $metadata)) {
+                // Iterate breakout recordings (if any) and update status.
+                foreach ($metadata['breakouts'] as $breakoutrecordingid => $breakoutmetadata) {
+                    $breakoutrecording = self::get_record(['recordingid' => $breakoutrecordingid]);
+                    if (!$breakoutrecording) {
+                        $breakoutrecording = new recording(0, (object) [
+                            'courseid' => $recording->get('courseid'),
+                            'bigbluebuttonbnid' => $recording->get('bigbluebuttonbnid'),
+                            'groupid' => $recording->get('groupid'),
+                            'recordingid' => $breakoutrecordingid
+                        ], $breakoutmetadata);
+                        $breakoutrecording->create();
+                    }
+                    $breakoutrecording->set_status(self::RECORDING_STATUS_PROCESSED);
+                    $foundcount++;
+                }
+            }
         }
 
         mtrace("=> Finished processing recordings. Updated status for {$foundcount} / {$recordingcount} recordings.");

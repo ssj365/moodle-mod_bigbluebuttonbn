@@ -282,9 +282,9 @@ EOF;
     /**
      * Get the current groupid if set.
      *
-     * @return null|int
+     * @return int
      */
-    public function get_group_id(): ?int {
+    public function get_group_id(): int {
         return empty($this->groupid) ? 0 : $this->groupid;
     }
 
@@ -294,7 +294,8 @@ EOF;
      * @return bool
      */
     public function uses_groups(): bool {
-        return $this->groupid !== null;
+        $groupmode = groups_get_activity_groupmode($this->get_cm());
+        return $groupmode != NOGROUPS;
     }
 
     /**
@@ -305,7 +306,7 @@ EOF;
     public function get_group_name(): ?string {
         $groupid = $this->get_group_id();
 
-        if ($groupid === null) {
+        if (!$this->uses_groups()) {
             return null;
         }
 
@@ -592,10 +593,10 @@ EOF;
      * @return bool
      */
     public function can_join(): bool {
-        global $USER;
         $groupid = $this->get_group_id();
         $context = $this->get_context();
-        $inrightgroup = !$groupid || $this->user_has_group_access($USER, $groupid);
+        $inrightgroup =
+            groups_group_visible($groupid, $this->get_course(), $this->get_cm());
         $hascapability = has_capability('moodle/category:manage', $context)
             || (has_capability('mod/bigbluebuttonbn:join', $context) && $inrightgroup);
         $canjoin = $this->get_type() != self::TYPE_RECORDING_ONLY && $hascapability; // Recording only cannot be joined ever.
@@ -725,6 +726,19 @@ EOF;
     }
 
     /**
+     * Get the appropriate designated role for the current user.
+     *
+     * @return string
+     */
+    public function get_current_user_role(): string {
+        if ($this->is_admin() || $this->is_moderator()) {
+            return 'MODERATOR';
+        }
+
+        return 'VIEWER';
+    }
+
+    /**
      * Whether to show the recording button
      *
      * @return bool
@@ -760,6 +774,18 @@ EOF;
         }
 
         return $this->is_feature_enabled('importrecordings');
+    }
+
+    /**
+     * Get recordings_imported from instancedata.
+     *
+     * @return bool
+     */
+    public function get_recordings_imported(): bool {
+        if (config::get('recordings_imported_editable')) {
+            return (bool) $this->get_instance_var('recordings_imported');
+        }
+        return config::get('recordings_imported_default');
     }
 
     /**
@@ -1086,10 +1112,9 @@ EOF;
      * Get recordings for this instance
      *
      * @param string[] $excludedid
-     * @param bool $viewdeleted view deleted recordings ?
      * @return recording[]
      */
-    public function get_recordings(array $excludedid = [], $viewdeleted = false): array {
+    public function get_recordings(array $excludedid = []): array {
         // Fetch the list of recordings depending on the status of the instance.
         // show room is enabled for TYPE_ALL and TYPE_ROOM_ONLY.
         if ($this->is_feature_enabled('showroom')) {
@@ -1106,7 +1131,7 @@ EOF;
             $excludedid,
             $this->is_feature_enabled('importrecordings'),
             false,
-            $viewdeleted
+            false
         );
     }
 

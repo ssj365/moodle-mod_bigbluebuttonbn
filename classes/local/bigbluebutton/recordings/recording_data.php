@@ -129,7 +129,6 @@ class recording_data {
             'width' => '225px',
             'type' => 'html',
             'allowHTML' => true,
-            // 'formatter' => 'customDate',
         ];
         $columns[] = [
             'key' => 'duration',
@@ -297,13 +296,23 @@ class recording_data {
         if ($rec->get('imported')) {
             return true;
         }
+        // When show imported recordings only is enabled, exclude all other recordings.
+        if ($instance->get_recordings_imported() && !$rec->get('imported')) {
+            return false;
+        }
         // Administrators and moderators are always allowed.
         if ($instance->is_admin() || $instance->is_moderator()) {
             return true;
         }
         // When groups are enabled, exclude those to which the user doesn't have access to.
-        if ($instance->uses_groups()) {
-            return intval($rec->get('groupid')) === intval($instance->get_group_id());
+        if ($instance->uses_groups() && !$instance->can_manage_recordings()) {
+            if (groups_get_activity_groupmode($instance->get_cm()) == VISIBLEGROUPS) {
+                // In case we are in visible group mode, we show all recordings.
+                return true;
+            }
+            // Else we check if the Recording group is the same as the instance. Instance group
+            // being the group chosen for this instance.
+            return intval($rec->get('groupid')) === $instance->get_group_id();
         }
         return true;
     }
