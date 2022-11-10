@@ -666,6 +666,10 @@ class recording extends persistent {
         $possiblesourcename = $this->get_possible_meta_name_for_source($fieldname, $metadata);
         return $metadata[$possiblesourcename] ?? null;
     }
+    /**
+     * @var string Default sort for recordings when fetching from the database.
+     */
+    const DEFAULT_RECORDING_SORT = 'timecreated ASC';
 
     /**
      * Fetch all records which match the specified parameters, including all metadata that relates to them.
@@ -679,7 +683,7 @@ class recording extends persistent {
 
         $withindays = time() - (self::RECORDING_TIME_LIMIT_DAYS * DAYSECS);
         // Sort for recordings when fetching from the database.
-        $recordingsort = $CFG->bigbluebuttonbn_recordings_sortorder ? 'timecreated ASC' : 'timecreated DESC';
+        $recordingsort = $CFG->bigbluebuttonbn_recordings_asc_sort ? 'timecreated ASC' : 'timecreated DESC';
 
         // Fetch the local data. Arbitrary sort by id, so we get the same result on different db engines.
         $recordings = $DB->get_records_select(
@@ -762,8 +766,6 @@ class recording extends persistent {
     public static function sync_pending_recordings_from_server(): void {
         global $DB, $CFG;
 
-        // Sort by bigbluebuttonbn_recordings_sortorder we get the same result on different db engines.
-        $recordingsort = $CFG->bigbluebuttonbn_recordings_sortorder ? 'timecreated ASC' : 'timecreated DESC';
         // Fetch the local data.
         mtrace("=> Looking for any recording awaiting processing from the past " . self::RECORDING_TIME_LIMIT_DAYS . " days.");
         $select = 'status = :status_awaiting AND timecreated > :withindays OR status = :status_reset';
@@ -771,7 +773,8 @@ class recording extends persistent {
                 'status_awaiting' => self::RECORDING_STATUS_AWAITING,
                 'withindays' => time() - (self::RECORDING_TIME_LIMIT_DAYS * DAYSECS),
                 'status_reset' => self::RECORDING_STATUS_RESET,
-            ], $recordingsort);
+            ], self::DEFAULT_RECORDING_SORT);
+        // Sort by DEFAULT_RECORDING_SORT we get the same result on different db engines.
 
         $recordingcount = count($recordings);
         mtrace("=> Found {$recordingcount} recordings to query");
