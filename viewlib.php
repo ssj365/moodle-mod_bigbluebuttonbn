@@ -35,6 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 function bigbluebuttonbn_view_groups(&$bbbsession) {
     global $CFG;
+    $context = context_module::instance($bbbsession['cm']->id);
     // Find out current group mode.
     $groupmode = groups_get_activity_groupmode($bbbsession['cm']);
     if ($groupmode == NOGROUPS) {
@@ -49,6 +50,16 @@ function bigbluebuttonbn_view_groups(&$bbbsession) {
         return;
     }
     $bbbsession['group'] = groups_get_activity_group($bbbsession['cm'], true);
+
+    // Disable All Participants option for Separate Groups.
+    $hideallparticipants = false;
+    if ($groupmode == SEPARATEGROUPS) {
+        $hideallparticipants = true;
+        if ((has_capability('moodle/site:accessallgroups', $context) && count($groups) > 0 && $bbbsession['group'] == 0)) {
+            // Groups_get_activity_group will still return 0 which is the All Participants option.
+            $bbbsession['group']++ ;
+        }
+    }
     $groupname = get_string('allparticipants');
     if ($bbbsession['group'] != 0) {
         $groupname = groups_get_group_name($bbbsession['group']);
@@ -61,12 +72,12 @@ function bigbluebuttonbn_view_groups(&$bbbsession) {
         bigbluebuttonbn_view_message_box($bbbsession, get_string('view_groups_notenrolled_warning', 'bigbluebuttonbn'), 'info');
         return;
     }
-    $context = context_module::instance($bbbsession['cm']->id);
+
     if (has_capability('moodle/site:accessallgroups', $context)) {
         bigbluebuttonbn_view_message_box($bbbsession, get_string('view_groups_selection_warning', 'bigbluebuttonbn'));
     }
     $urltoroot = $CFG->wwwroot.'/mod/bigbluebuttonbn/view.php?id='.$bbbsession['cm']->id;
-    groups_print_activity_menu($bbbsession['cm'], $urltoroot);
+    groups_print_activity_menu($bbbsession['cm'], $urltoroot, null, $hideallparticipants);
     echo '<br><br>';
 }
 
