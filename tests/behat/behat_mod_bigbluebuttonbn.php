@@ -48,6 +48,8 @@ class behat_mod_bigbluebuttonbn extends behat_base {
         if (defined('TEST_MOD_BIGBLUEBUTTONBN_MOCK_SERVER')) {
             $this->send_mock_request('backoffice/reset');
         }
+        set_config('bigbluebuttonbn_server_url', 'http://test-install.blindsidenetworks.com/bigbluebutton/');
+        set_config('bigbluebuttonbn_shared_secret', '8cd8ef52e8e101574e400365b55e11a6');
     }
 
     /**
