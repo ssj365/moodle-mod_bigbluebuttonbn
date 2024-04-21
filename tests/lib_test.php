@@ -284,9 +284,9 @@ class mod_bigbluebuttonbn_lib_test extends advanced_testcase {
      */
     public function test_bigbluebuttonbn_reset_course_form_definition() {
         global $CFG, $PAGE;
+        $this->resetAfterTest();
         $PAGE->set_course($this->course);
         $this->setAdminUser();
-        $this->resetAfterTest();
         list($bbactivitycontext, $bbactivitycm, $bbactivity) = $this->create_instance();
         include_once($CFG->dirroot . '/mod/bigbluebuttonbn/mod_form.php');
         $data = new stdClass();
