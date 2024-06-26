@@ -312,8 +312,10 @@ class bigbluebutton {
             return true;
         }
         if ($groupmode == VISIBLEGROUPS or $aag) {
+
             $allowedgroups = groups_get_all_groups($course->id, $user->id, $course->defaultgroupingid);
-        } else {
+        }
+        else {
             $allowedgroups = groups_get_all_groups($course->id, $user->id, $course->defaultgroupingid);
         }
         foreach ($allowedgroups as $g) {
